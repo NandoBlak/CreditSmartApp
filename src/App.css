@@ -503,6 +503,170 @@ body {
   box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
 }
 
+.btn-submit:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Validaciones */
+.input-error {
+  border-color: #e74c3c !important;
+}
+
+.error-text {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+  display: block;
+}
+
+/* Cuota estimada en formulario */
+.cuota-estimada-form {
+  background: linear-gradient(135deg, #e8f4f8 0%, #f0e8f8 100%);
+  padding: 1.5rem;
+  border-radius: 10px;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.cuota-valor-grande {
+  font-size: 2rem;
+  color: #667eea;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+/* Resumen de solicitud */
+.resumen-solicitud {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+.resumen-solicitud h2 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.resumen-seccion {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.resumen-seccion h3 {
+  color: #667eea;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.resumen-seccion p {
+  margin: 0.8rem 0;
+  color: #2c3e50;
+  font-size: 1.05rem;
+}
+
+.cuota-destacada {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem !important;
+  text-align: center;
+  font-size: 1.3rem !important;
+}
+
+.resumen-acciones {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-editar,
+.btn-confirmar {
+  flex: 1;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-editar {
+  background: #95a5a6;
+  color: white;
+}
+
+.btn-editar:hover {
+  background: #7f8c8d;
+}
+
+.btn-confirmar {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  color: white;
+}
+
+.btn-confirmar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+}
+
+/* Mensaje de éxito */
+.mensaje-exito {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.icono-exito {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  color: white;
+  font-size: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.mensaje-exito h2 {
+  color: #27ae60;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+}
+
+.mensaje-exito p {
+  color: #2c3e50;
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.redireccion {
+  color: #7f8c8d !important;
+  font-size: 1rem !important;
+  margin-top: 2rem !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .nav-container {
