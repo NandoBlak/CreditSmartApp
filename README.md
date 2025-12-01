@@ -1,16 +1,213 @@
-# React + Vite
+# 💳 CreditSmart - Sistema de Gestión de Créditos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Desarrollado por:** Hernando Angel Perez Fernandez
 
-Currently, two official plugins are available:
+## 📋 Descripción del Proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+CreditSmart es una aplicación web interactiva para la simulación y solicitud de créditos financieros. Permite a los usuarios explorar diferentes productos crediticios, simular cuotas mensuales con cálculos precisos y enviar solicitudes de crédito con validaciones en tiempo real.
 
-## React Compiler
+La aplicación ofrece una experiencia de usuario completa con filtrado dinámico, búsqueda en tiempo real, simulación de pagos y un formulario de solicitud con validaciones exhaustivas.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Características Principales
 
-## Expanding the ESLint configuration
+- ✅ **Catálogo de Productos**: Visualización de 5 tipos de créditos (Libre Inversión, Vehículo, Vivienda, Educativo, Empresarial)
+- 🔍 **Búsqueda y Filtros**: Búsqueda por nombre, filtros por rango de monto y tasa de interés en tiempo real
+- 📊 **Simulador Interactivo**: Sliders para ajustar monto y plazo con cálculo automático de cuotas
+- 📝 **Formulario Completo**: Solicitud de crédito con validaciones en tiempo real
+- ✨ **Resumen Pre-envío**: Vista previa de la solicitud antes de confirmar
+- 💾 **Almacenamiento en Memoria**: Todas las solicitudes se guardan en un array
+- ✅ **Mensaje de Éxito**: Confirmación visual con animación y redirección automática
+- 📱 **Diseño Responsive**: Totalmente adaptable a dispositivos móviles y tablets
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tecnologías Utilizadas
+
+### Core
+- **React 19.2.0** - Biblioteca principal para la interfaz de usuario
+- **React Router DOM 7.1.1** - Navegación y enrutamiento SPA
+- **Vite 7.2.4** - Build tool y servidor de desarrollo
+
+### Desarrollo
+- **ESLint 9.39.1** - Linter para calidad de código
+- **@vitejs/plugin-react 5.1.1** - Plugin de React para Vite
+- **JavaScript ES6+** - Lenguaje de programación
+
+### Características de React Utilizadas
+- Hooks: `useState`, `useEffect`, `useParams`, `useNavigate`, `useLocation`
+- Componentes funcionales
+- Props y destructuring
+- Renderizado condicional
+- Manejo de eventos
+- Métodos de array: `.map()`, `.filter()`, `.sort()`, `.find()`
+
+## 📦 Instalación
+
+### Prerrequisitos
+- Node.js (versión 16 o superior)
+- npm (viene con Node.js)
+
+### Pasos de Instalación
+
+1. **Clonar el repositorio**
+```bash
+git clone <url-del-repositorio>
+cd CreditSmart
+```
+
+2. **Instalar dependencias**
+```bash
+npm install
+```
+
+3. **Iniciar el servidor de desarrollo**
+```bash
+npm run dev
+```
+
+4. **Abrir en el navegador**
+```
+http://localhost:5173
+```
+
+## 📝 Scripts Disponibles
+
+```bash
+# Iniciar servidor de desarrollo
+npm run dev
+
+# Compilar para producción
+npm run build
+
+# Previsualizar build de producción
+npm run preview
+
+# Ejecutar linter
+npm run lint
+```
+
+## 📂 Estructura del Proyecto
+
+```
+CreditSmart/
+├── public/                 # Archivos estáticos
+├── src/
+│   ├── components/        # Componentes reutilizables
+│   │   ├── navbar.jsx     # Barra de navegación
+│   │   └── creditCard.jsx # Tarjeta de producto
+│   ├── data/
+│   │   └── creditsdata.js # Datos de productos
+│   ├── pages/             # Páginas principales
+│   │   ├── Home.jsx       # Página de inicio
+│   │   ├── Simulador.jsx  # Búsqueda y filtros
+│   │   ├── Simular.jsx    # Simulación detallada
+│   │   └── Solicitar.jsx  # Formulario de solicitud
+│   ├── App.jsx            # Componente raíz con rutas
+│   ├── App.css            # Estilos globales
+│   ├── main.jsx           # Punto de entrada
+│   └── index.css          # Estilos base
+├── package.json           # Dependencias y scripts
+├── vite.config.js         # Configuración de Vite
+├── eslint.config.js       # Configuración de ESLint
+└── README.md              # Este archivo
+```
+
+## 🎯 Funcionalidades por Página
+
+### 🏠 Home
+- Muestra todos los productos de crédito disponibles
+- Usa `.map()` para renderizar las tarjetas
+- Componente `CreditCard` reutilizable con props
+- Links a simulación para cada producto
+
+### 🔍 Simulador
+- Búsqueda en tiempo real por nombre
+- Filtro por rango de monto (Bajo, Medio, Alto)
+- Filtro por tasa de interés (Baja, Media, Alta)
+- Ordenamiento automático por tasa (menor a mayor)
+- Mensaje "No hay créditos disponibles" cuando no hay resultados
+- Usa `useState`, `filter()` y `sort()`
+
+### 📊 Simular
+- Sliders interactivos para monto y plazo
+- Cálculo automático de:
+  - Tasa efectiva mensual
+  - Cuota mensual aproximada
+  - Total a pagar
+  - Intereses totales
+- Botón para solicitar el crédito con datos pre-llenados
+
+### 📝 Solicitar
+- Formulario con 7 campos (nombre, email, teléfono, cédula, tipo, monto, plazo)
+- Validaciones en tiempo real:
+  - Nombre: mínimo 3 caracteres
+  - Email: formato válido
+  - Teléfono: 10 dígitos
+  - Cédula: 6-10 dígitos
+  - Monto: mínimo $500.000
+  - Plazo: 1-240 meses
+- Cálculo automático de cuota al cambiar monto/plazo
+- Resumen completo antes de enviar
+- Almacenamiento en array (memoria)
+- Mensaje de éxito animado
+- Limpieza automática del formulario
+- Redirección después de 3 segundos
+
+## 🎨 Diseño y Estilos
+
+- **Paleta de colores**: Gradientes morados y azules (#667eea, #764ba2)
+- **Tipografía**: Segoe UI
+- **Efectos**: Hover, transforms, shadows, animaciones
+- **Layout**: CSS Grid y Flexbox
+- **Responsive**: Media queries para móviles
+
+## 📸 Capturas de Pantalla
+
+### Página de Inicio
+![Home Page - Muestra el catálogo completo de productos crediticios con tarjetas elegantes y hero section]
+
+### Simulador con Filtros
+![Simulador - Búsqueda y filtros activos mostrando productos filtrados en tiempo real]
+
+### Página de Simulación Detallada
+![Simular - Sliders interactivos con cálculo de cuotas y resultados detallados]
+
+### Formulario de Solicitud
+![Formulario - Campos con validaciones en tiempo real y mensajes de error]
+
+### Resumen de Solicitud
+![Resumen - Vista previa completa antes de confirmar el envío]
+
+### Mensaje de Éxito
+![Éxito - Confirmación animada con ícono de check y mensaje de redirección]
+
+## 🧪 Conceptos de React Implementados
+
+1. **Componentes Funcionales**: Todos los componentes usan sintaxis moderna
+2. **useState**: Manejo de estado local en formularios y filtros
+3. **useEffect**: Cálculos automáticos cuando cambian dependencias
+4. **Props**: Paso de datos entre componentes (Home → CreditCard)
+5. **Routing**: Navegación SPA con React Router
+6. **Parámetros dinámicos**: URLs como `/simular/:id`
+7. **Renderizado condicional**: Mostrar/ocultar elementos según estado
+8. **Métodos de array**: map, filter, sort, find
+9. **Event handlers**: onChange, onSubmit, onClick
+10. **Formularios controlados**: Inputs sincronizados con estado
+
+## 👨‍💻 Autor
+
+**Hernando Angel Perez Fernandez**
+
+---
+
+## 📄 Licencia
+
+Este proyecto fue desarrollado con fines educativos.
+
+---
+
+## 🤝 Contribuciones
+
+Este es un proyecto académico. Las sugerencias y mejoras son bienvenidas.
+
+---
+
+**Desarrollado con ❤️ usando React + Vite**
