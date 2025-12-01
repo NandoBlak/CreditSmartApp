@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { productos } from '../data/creditsdata.js';
 
@@ -25,24 +25,44 @@ function Solicitar() {
 
   // Estados para validaciones
   const [errores, setErrores] = useState({});
-  const [cuotaMensual, setCuotaMensual] = useState(null);
   const [mostrarResumen, setMostrarResumen] = useState(false);
   const [mensajeExito, setMensajeExito] = useState(false);
+
+  // Calcular cuota mensual como valor derivado
+  const cuotaMensual = useMemo(() => {
+    if (formData.monto && formData.plazo && formData.tipoCredito) {
+      const producto = productos.find(p => p.id === formData.tipoCredito);
+      if (producto) {
+        const capital = parseInt(formData.monto.toString().replace(/\D/g, ''));
+        const tasaAnual = parseFloat(producto.tasa) / 100;
+        const tasaMensual = Math.pow(1 + tasaAnual, 1 / 12) - 1;
+        const numeroPagos = parseInt(formData.plazo);
+        
+        if (capital > 0 && numeroPagos > 0) {
+          const cuota = capital * (tasaMensual * Math.pow(1 + tasaMensual, numeroPagos)) / 
+                        (Math.pow(1 + tasaMensual, numeroPagos) - 1);
+          return Math.round(cuota);
+        }
+      }
+    }
+    return null;
+  }, [formData.monto, formData.plazo, formData.tipoCredito]);
 
   // Validaciones en tiempo real
   const validarCampo = (nombre, valor) => {
     const nuevosErrores = { ...errores };
 
     switch (nombre) {
-      case 'nombre':
+      case 'nombre': {
         if (valor.length < 3) {
           nuevosErrores.nombre = 'El nombre debe tener al menos 3 caracteres';
         } else {
           delete nuevosErrores.nombre;
         }
         break;
+      }
       
-      case 'email':
+      case 'email': {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(valor)) {
           nuevosErrores.email = 'Email inválido';
@@ -50,8 +70,9 @@ function Solicitar() {
           delete nuevosErrores.email;
         }
         break;
+      }
       
-      case 'telefono':
+      case 'telefono': {
         const telefonoRegex = /^[0-9]{10}$/;
         if (!telefonoRegex.test(valor)) {
           nuevosErrores.telefono = 'El teléfono debe tener 10 dígitos';
@@ -59,16 +80,18 @@ function Solicitar() {
           delete nuevosErrores.telefono;
         }
         break;
+      }
       
-      case 'cedula':
+      case 'cedula': {
         if (valor.length < 6 || valor.length > 10) {
           nuevosErrores.cedula = 'La cédula debe tener entre 6 y 10 dígitos';
         } else {
           delete nuevosErrores.cedula;
         }
         break;
+      }
       
-      case 'monto':
+      case 'monto': {
         const montoNum = parseInt(valor.replace(/\D/g, ''));
         if (isNaN(montoNum) || montoNum < 500000) {
           nuevosErrores.monto = 'El monto mínimo es $500.000';
@@ -76,14 +99,16 @@ function Solicitar() {
           delete nuevosErrores.monto;
         }
         break;
+      }
       
-      case 'plazo':
+      case 'plazo': {
         if (valor < 1 || valor > 240) {
           nuevosErrores.plazo = 'El plazo debe estar entre 1 y 240 meses';
         } else {
           delete nuevosErrores.plazo;
         }
         break;
+      }
       
       default:
         break;
@@ -100,25 +125,6 @@ function Solicitar() {
     });
     validarCampo(name, value);
   };
-
-  // Calcular cuota mensual cuando cambia monto o plazo
-  useEffect(() => {
-    if (formData.monto && formData.plazo && formData.tipoCredito) {
-      const producto = productos.find(p => p.id === formData.tipoCredito);
-      if (producto) {
-        const capital = parseInt(formData.monto.toString().replace(/\D/g, ''));
-        const tasaAnual = parseFloat(producto.tasa) / 100;
-        const tasaMensual = Math.pow(1 + tasaAnual, 1 / 12) - 1;
-        const numeroPagos = parseInt(formData.plazo);
-        
-        if (capital > 0 && numeroPagos > 0) {
-          const cuota = capital * (tasaMensual * Math.pow(1 + tasaMensual, numeroPagos)) / 
-                        (Math.pow(1 + tasaMensual, numeroPagos) - 1);
-          setCuotaMensual(Math.round(cuota));
-        }
-      }
-    }
-  }, [formData.monto, formData.plazo, formData.tipoCredito]);
 
   const formatoPesos = (x) => {
     return new Intl.NumberFormat('es-CO', {
@@ -153,7 +159,7 @@ function Solicitar() {
     setMensajeExito(true);
     setMostrarResumen(false);
     
-    // Limpiar formulario automáticamente después de 2 segundos
+    // Limpiar formulario automáticamente después de 3 segundos
     setTimeout(() => {
       setFormData({
         nombre: '',
@@ -164,7 +170,6 @@ function Solicitar() {
         plazo: '',
         tipoCredito: ''
       });
-      setCuotaMensual(null);
       setMensajeExito(false);
       navigate('/');
     }, 3000);

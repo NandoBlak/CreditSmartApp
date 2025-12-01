@@ -778,6 +778,7 @@ body {
   border-radius: 5px;
   background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
   outline: none;
+  appearance: none;
   -webkit-appearance: none;
 }
 

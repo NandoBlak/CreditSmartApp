@@ -56,19 +56,6 @@ function Simulador() {
       return tasaA - tasaB;
     });
 
-  // Calcular cuota aproximada
-  const calcularCuota = (producto, montoCredito) => {
-    if (!montoCredito || !plazo) return null;
-    const capital = parseInt(montoCredito.replace(/\D/g, ''));
-    const tasaMensual = parseFloat(producto.tasa) / 100 / 12;
-    const numeroPagos = parseInt(plazo);
-    
-    const cuota = capital * (tasaMensual * Math.pow(1 + tasaMensual, numeroPagos)) / 
-                  (Math.pow(1 + tasaMensual, numeroPagos) - 1);
-    
-    return cuota.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
-  };
-
   return (
     <div className="simulador">
       <h1>Simulador de Créditos</h1>
