@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { productos } from '../data/creditsdata.js';
 
 function Simulador() {
@@ -131,7 +132,9 @@ function Simulador() {
                 <p><strong>Tasa:</strong> {producto.tasa}</p>
                 <p><strong>Monto:</strong> {producto.montoDesde} - {producto.montoHasta}</p>
                 <p><strong>Plazo máximo:</strong> {producto.plazoMax}</p>
-                <button>Solicitar</button>
+                <Link to={`/simular/${producto.id}`}>
+                  <button>Simular</button>
+                </Link>
               </div>
             ))}
           </div>
