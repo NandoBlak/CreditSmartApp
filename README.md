@@ -162,22 +162,19 @@ CreditSmart/
 ## 📸 Capturas de Pantalla
 
 ### Página de Inicio
-![Home Page - Muestra el catálogo completo de productos crediticios con tarjetas elegantes y hero section]
+![Página de Inicio - Catálogo completo de productos crediticios](./src/assets/Captura%20de%20pantalla/inicio.png)
+
+*Muestra el hero section con bienvenida y el catálogo completo de 5 productos crediticios con diseño de tarjetas elegantes.*
 
 ### Simulador con Filtros
-![Simulador - Búsqueda y filtros activos mostrando productos filtrados en tiempo real]
+![Simulador - Búsqueda y filtros en tiempo real](./src/assets/Captura%20de%20pantalla/simulador.png)
 
-### Página de Simulación Detallada
-![Simular - Sliders interactivos con cálculo de cuotas y resultados detallados]
+*Vista del simulador con búsqueda por nombre, filtros por rango de monto y tasa de interés. Permite ordenar y filtrar productos dinámicamente.*
 
 ### Formulario de Solicitud
-![Formulario - Campos con validaciones en tiempo real y mensajes de error]
+![Formulario de Solicitud - Validaciones en tiempo real](./src/assets/Captura%20de%20pantalla/solicitar.png)
 
-### Resumen de Solicitud
-![Resumen - Vista previa completa antes de confirmar el envío]
-
-### Mensaje de Éxito
-![Éxito - Confirmación animada con ícono de check y mensaje de redirección]
+*Formulario completo con 7 campos, validaciones en tiempo real, cálculo automático de cuota mensual y resumen antes de enviar.*
 
 ## 🧪 Conceptos de React Implementados
 
