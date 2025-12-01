@@ -1,14 +1,19 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Navbar from './components/navbar'
+import Home from './pages/Home'
+import Simulador from './pages/Simulador'
+import Solicitar from './pages/Solicitar'
 import './App.css'
 
 function App() {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
-        <Route path="/" element={<h1>Inicio</h1>} />
-        <Route path="/productos" element={<h1>Productos</h1>} />
-        <Route path="/nosotros" element={<h1>Nosotros</h1>} />
-        <Route path="/contacto" element={<h1>Contacto</h1>} />
+        <Route path="/" element={<Home />} />
+        <Route path="/simulador" element={<Simulador />} />
+        <Route path="/solicitar" element={<Solicitar />} />
+        <Route path="/solicitar/:id" element={<Solicitar />} />
       </Routes>
     </BrowserRouter>
   )

@@ -2,51 +2,63 @@ import { useState } from 'react';
 import { productos } from '../data/creditsdata.js';
 
 function Simulador() {
-  const [monto, setMonto] = useState('');
+  const [busqueda, setBusqueda] = useState('');
+  const [rangoMonto, setRangoMonto] = useState('todos');
+  const [filtroTasa, setFiltroTasa] = useState('todos');
   const [plazo, setPlazo] = useState('');
-  const [tipoCredito, setTipoCredito] = useState('todos');
-  const [ordenar, setOrdenar] = useState('nombre');
 
   // Filtrar productos
   const productosFiltrados = productos
     .filter(producto => {
-      // Filtrar por tipo de crédito
-      if (tipoCredito !== 'todos' && producto.tipo !== tipoCredito) {
+      // Búsqueda por nombre en tiempo real
+      if (busqueda && !producto.nombre.toLowerCase().includes(busqueda.toLowerCase())) {
         return false;
       }
-      // Filtrar por monto (si se ingresó)
-      if (monto) {
-        const montoNum = parseInt(monto.replace(/\D/g, ''));
+      
+      // Filtro por rango de monto
+      if (rangoMonto !== 'todos') {
         const montoDesdeNum = parseInt(producto.montoDesde.replace(/\D/g, ''));
         const montoHastaNum = parseInt(producto.montoHasta.replace(/\D/g, ''));
-        if (montoNum < montoDesdeNum || montoNum > montoHastaNum) {
+        
+        if (rangoMonto === 'bajo' && montoHastaNum > 50000000) {
+          return false;
+        }
+        if (rangoMonto === 'medio' && (montoDesdeNum > 200000000 || montoHastaNum < 50000000)) {
+          return false;
+        }
+        if (rangoMonto === 'alto' && montoDesdeNum < 200000000) {
           return false;
         }
       }
+      
+      // Filtro por tasa de interés
+      if (filtroTasa !== 'todos') {
+        const tasa = parseFloat(producto.tasa);
+        
+        if (filtroTasa === 'baja' && tasa > 8) {
+          return false;
+        }
+        if (filtroTasa === 'media' && (tasa <= 8 || tasa > 12)) {
+          return false;
+        }
+        if (filtroTasa === 'alta' && tasa <= 12) {
+          return false;
+        }
+      }
+      
       return true;
     })
     .sort((a, b) => {
-      // Ordenar productos
-      if (ordenar === 'nombre') {
-        return a.nombre.localeCompare(b.nombre);
-      }
-      if (ordenar === 'tasa') {
-        const tasaA = parseFloat(a.tasa);
-        const tasaB = parseFloat(b.tasa);
-        return tasaA - tasaB;
-      }
-      if (ordenar === 'plazo') {
-        const plazoA = parseInt(a.plazoMax);
-        const plazoB = parseInt(b.plazoMax);
-        return plazoB - plazoA;
-      }
-      return 0;
+      // Ordenar por tasa (menor a mayor)
+      const tasaA = parseFloat(a.tasa);
+      const tasaB = parseFloat(b.tasa);
+      return tasaA - tasaB;
     });
 
   // Calcular cuota aproximada
-  const calcularCuota = (producto) => {
-    if (!monto || !plazo) return null;
-    const capital = parseInt(monto.replace(/\D/g, ''));
+  const calcularCuota = (producto, montoCredito) => {
+    if (!montoCredito || !plazo) return null;
+    const capital = parseInt(montoCredito.replace(/\D/g, ''));
     const tasaMensual = parseFloat(producto.tasa) / 100 / 12;
     const numeroPagos = parseInt(plazo);
     
@@ -62,17 +74,37 @@ function Simulador() {
       
       <div className="filtros">
         <div className="input-group">
-          <label>Monto deseado:</label>
+          <label>Buscar por nombre:</label>
           <input 
             type="text" 
-            placeholder="Ej: $10.000.000"
-            value={monto}
-            onChange={(e) => setMonto(e.target.value)}
+            placeholder="Ej: Vivienda, Vehículo..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
           />
         </div>
 
         <div className="input-group">
-          <label>Plazo (meses):</label>
+          <label>Rango de monto:</label>
+          <select value={rangoMonto} onChange={(e) => setRangoMonto(e.target.value)}>
+            <option value="todos">Todos los rangos</option>
+            <option value="bajo">Hasta $50.000.000</option>
+            <option value="medio">$50.000.000 - $200.000.000</option>
+            <option value="alto">Más de $200.000.000</option>
+          </select>
+        </div>
+
+        <div className="input-group">
+          <label>Tasa de interés:</label>
+          <select value={filtroTasa} onChange={(e) => setFiltroTasa(e.target.value)}>
+            <option value="todos">Todas las tasas</option>
+            <option value="baja">Baja (hasta 8%)</option>
+            <option value="media">Media (8% - 12%)</option>
+            <option value="alta">Alta (más de 12%)</option>
+          </select>
+        </div>
+
+        <div className="input-group">
+          <label>Plazo deseado (meses):</label>
           <input 
             type="number" 
             placeholder="Ej: 36"
@@ -80,53 +112,29 @@ function Simulador() {
             onChange={(e) => setPlazo(e.target.value)}
           />
         </div>
-
-        <div className="input-group">
-          <label>Tipo de crédito:</label>
-          <select value={tipoCredito} onChange={(e) => setTipoCredito(e.target.value)}>
-            <option value="todos">Todos</option>
-            <option value="libre">Libre Inversión</option>
-            <option value="vehiculo">Vehículo</option>
-            <option value="vivienda">Vivienda</option>
-            <option value="educativo">Educativo</option>
-            <option value="empresarial">Empresarial</option>
-          </select>
-        </div>
-
-        <div className="input-group">
-          <label>Ordenar por:</label>
-          <select value={ordenar} onChange={(e) => setOrdenar(e.target.value)}>
-            <option value="nombre">Nombre</option>
-            <option value="tasa">Tasa (menor a mayor)</option>
-            <option value="plazo">Plazo (mayor a menor)</option>
-          </select>
-        </div>
       </div>
 
       <div className="resultados">
         <h2>Productos disponibles ({productosFiltrados.length})</h2>
-        <div className="productos-grid">
-          {productosFiltrados.map((producto) => (
-            <div key={producto.id} className="producto-card">
-              <h3>{producto.nombre}</h3>
-              <p><strong>Tasa:</strong> {producto.tasa}</p>
-              <p><strong>Monto:</strong> {producto.montoDesde} - {producto.montoHasta}</p>
-              <p><strong>Plazo máximo:</strong> {producto.plazoMax}</p>
-              {monto && plazo && (
-                <div className="cuota-estimada">
-                  <p><strong>Cuota estimada:</strong></p>
-                  <p className="cuota-valor">{calcularCuota(producto)}</p>
-                </div>
-              )}
-              <button>Solicitar</button>
-            </div>
-          ))}
-        </div>
-        
-        {productosFiltrados.length === 0 && (
-          <p className="sin-resultados">
-            No hay productos que coincidan con tus criterios de búsqueda.
-          </p>
+        {productosFiltrados.length === 0 ? (
+          <div className="sin-resultados">
+            <p>No hay créditos disponibles</p>
+            <p className="sin-resultados-subtitulo">
+              Intenta ajustar tus filtros de búsqueda
+            </p>
+          </div>
+        ) : (
+          <div className="productos-grid">
+            {productosFiltrados.map((producto) => (
+              <div key={producto.id} className="producto-card">
+                <h3>{producto.nombre}</h3>
+                <p><strong>Tasa:</strong> {producto.tasa}</p>
+                <p><strong>Monto:</strong> {producto.montoDesde} - {producto.montoHasta}</p>
+                <p><strong>Plazo máximo:</strong> {producto.plazoMax}</p>
+                <button>Solicitar</button>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>

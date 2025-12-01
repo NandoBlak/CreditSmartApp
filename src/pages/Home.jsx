@@ -1,18 +1,17 @@
 import { productos } from '../data/creditsdata.js';
+import CreditCard from '../components/creditCard';
 
 function Home() {
   return (
     <div className="home">
-      <h1>Nuestros Productos de Crédito</h1>
+      <div className="hero">
+        <h1>Bienvenido a CreditSmart</h1>
+        <p>Las mejores opciones de crédito para ti</p>
+      </div>
+      <h2 className="section-title">Nuestros Productos de Crédito</h2>
       <div className="productos-lista">
         {productos.map((producto) => (
-          <div key={producto.id} className="producto-card">
-            <h2>{producto.nombre}</h2>
-            <p><strong>Tasa:</strong> {producto.tasa}</p>
-            <p><strong>Monto:</strong> {producto.montoDesde} - {producto.montoHasta}</p>
-            <p><strong>Plazo máximo:</strong> {producto.plazoMax}</p>
-            <button>Solicitar</button>
-          </div>
+          <CreditCard key={producto.id} producto={producto} />
         ))}
       </div>
     </div>
