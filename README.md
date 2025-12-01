@@ -204,7 +204,3 @@ Este proyecto fue desarrollado con fines educativos.
 ## 🤝 Contribuciones
 
 Este es un proyecto académico. Las sugerencias y mejoras son bienvenidas.
-
----
-
-**Desarrollado con ❤️ usando React + Vite**
