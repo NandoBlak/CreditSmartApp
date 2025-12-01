@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { productos } from '../data/creditsData.js';
+import { productos } from '../data/creditsdata.js';
 
 function Simulador() {
   const [monto, setMonto] = useState('');

@@ -1,4 +1,4 @@
-import { productos } from '../data/creditsData.js';
+import { productos } from '../data/creditsdata.js';
 
 function Home() {
   return (
