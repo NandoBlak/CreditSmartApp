@@ -1,0 +1,316 @@
+# 📚 GLOSARIO DE CREDITSMART - TÉRMINOS Y CONCEPTOS
+
+**Estudiante:** Hernando Angel Perez Fernandez
+
+---
+
+## 🎯 CONCEPTOS DE REACT
+
+### **React**
+Biblioteca de JavaScript para construir interfaces de usuario mediante componentes reutilizables. Permite crear aplicaciones web interactivas y dinámicas.
+
+### **Componente**
+Bloque reutilizable de código que retorna elementos JSX. En CreditSmart: `CreditCard`, `Home`, `Simulador`, `Solicitar`.
+
+### **JSX (JavaScript XML)**
+Sintaxis que combina JavaScript con HTML. Ejemplo: `<h1>{producto.nombre}</h1>` mezcla HTML con variables JS.
+
+### **Props (Properties)**
+Datos que se pasan de un componente padre a un componente hijo. Ejemplo:
+```jsx
+<CreditCard producto={producto} />
+// producto es una prop
+```
+
+### **useState Hook**
+Hook que permite agregar estado a componentes funcionales. Retorna un valor y una función para actualizarlo.
+```jsx
+const [nombre, setNombre] = useState('');
+```
+
+### **useEffect Hook**
+Hook que ejecuta código cuando el componente se monta o cuando cambian dependencias específicas.
+
+### **useMemo Hook**
+Hook que memoriza valores calculados para evitar recalcularlos en cada render. Usado para calcular la cuota mensual.
+
+### **useParams Hook**
+Hook de React Router que extrae parámetros de la URL. Ejemplo: `/simular/:id` → `useParams()` obtiene el `id`.
+
+### **useNavigate Hook**
+Hook de React Router que permite navegar programáticamente entre rutas.
+```jsx
+navigate('/home');
+```
+
+### **useLocation Hook**
+Hook que proporciona información sobre la URL actual y puede recibir datos mediante `state`.
+
+---
+
+## 🛣️ CONCEPTOS DE REACT ROUTER
+
+### **React Router**
+Librería que maneja la navegación entre páginas sin recargar el navegador (SPA - Single Page Application).
+
+### **BrowserRouter**
+Componente que habilita el enrutamiento usando la API History del navegador.
+
+### **Routes**
+Contenedor que agrupa todas las rutas de la aplicación.
+
+### **Route**
+Define una ruta específica con su componente asociado.
+```jsx
+<Route path="/simulador" element={<Simulador />} />
+```
+
+### **Link**
+Componente para crear enlaces de navegación sin recargar la página.
+```jsx
+<Link to="/simulador">Ir al Simulador</Link>
+```
+
+### **Parámetros de URL**
+Variables en la ruta que permiten crear rutas dinámicas.
+```jsx
+<Route path="/simular/:id" element={<Simular />} />
+// :id es un parámetro dinámico
+```
+
+---
+
+## 💻 MÉTODOS DE ARRAYS EN JAVASCRIPT
+
+### **.map()**
+Itera sobre un array y retorna un nuevo array transformado. Usado para renderizar listas.
+```jsx
+productos.map(producto => <CreditCard key={producto.id} producto={producto} />)
+```
+
+### **.filter()**
+Crea un nuevo array con elementos que cumplen una condición. Usado en el simulador para filtrar créditos.
+```jsx
+productos.filter(p => p.tipo === 'libre')
+```
+
+### **.sort()**
+Ordena los elementos de un array. Usado para ordenar por tasa o nombre.
+```jsx
+productos.sort((a, b) => a.tasa - b.tasa)
+```
+
+### **.find()**
+Retorna el primer elemento que cumple una condición.
+```jsx
+productos.find(p => p.id === 'vehiculo')
+```
+
+### **.push()**
+Agrega un elemento al final de un array.
+```jsx
+solicitudesEnMemoria.push(nuevaSolicitud)
+```
+
+---
+
+## 🎨 CONCEPTOS DE CSS
+
+### **Grid Layout**
+Sistema de diseño en dos dimensiones (filas y columnas). Usado para organizar las tarjetas de productos.
+```css
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+```
+
+### **Flexbox**
+Sistema de diseño en una dimensión. Usado en el navbar y formularios.
+```css
+display: flex;
+justify-content: space-between;
+```
+
+### **Responsive Design**
+Diseño que se adapta a diferentes tamaños de pantalla usando media queries y unidades flexibles.
+
+### **Hover Effect**
+Efecto visual que ocurre al pasar el cursor sobre un elemento.
+```css
+.card:hover {
+  transform: translateY(-5px);
+}
+```
+
+### **Transition**
+Animación suave entre estados CSS.
+```css
+transition: all 0.3s ease;
+```
+
+---
+
+## 🔧 CONCEPTOS DE DESARROLLO WEB
+
+### **SPA (Single Page Application)**
+Aplicación web que carga una sola página HTML y actualiza dinámicamente el contenido sin recargar.
+
+### **npm (Node Package Manager)**
+Gestor de paquetes de JavaScript. Permite instalar librerías como React y React Router.
+
+### **Vite**
+Herramienta de construcción rápida para aplicaciones web modernas. Alternativa a Create React App.
+
+### **ESLint**
+Herramienta que analiza el código para encontrar errores y mantener buenas prácticas.
+
+### **node_modules**
+Carpeta donde npm instala todas las dependencias del proyecto.
+
+### **package.json**
+Archivo que define las dependencias y scripts del proyecto.
+
+### **Import/Export**
+Sistema de módulos ES6 para compartir código entre archivos.
+```jsx
+export const productos = [...];
+import { productos } from './data';
+```
+
+---
+
+## 💰 CONCEPTOS FINANCIEROS DEL PROYECTO
+
+### **Tasa Efectiva Anual (E.A.)**
+Porcentaje que se paga anualmente por un crédito, considerando capitalización.
+
+### **Cuota Mensual**
+Pago fijo mensual que incluye capital e intereses.
+
+### **Plazo**
+Tiempo en meses para pagar el crédito.
+
+### **Capital o Monto**
+Cantidad de dinero solicitada en el crédito.
+
+### **Intereses**
+Costo adicional que se paga por usar el dinero prestado.
+
+### **Fórmula de Cuota**
+```javascript
+cuota = P * i / (1 - (1 + i)^-n)
+// P = monto, i = tasa mensual, n = plazo
+```
+
+---
+
+## 📁 ESTRUCTURA DEL PROYECTO
+
+### **src/**
+Carpeta principal del código fuente.
+
+### **src/components/**
+Componentes reutilizables como `CreditCard.jsx`.
+
+### **src/pages/**
+Componentes que representan páginas completas: `Home.jsx`, `Simulador.jsx`, etc.
+
+### **src/data/**
+Archivos con datos estáticos como `creditsdata.js`.
+
+### **src/assets/**
+Recursos estáticos como imágenes y capturas de pantalla.
+
+### **public/**
+Archivos públicos accesibles directamente (favicon, etc.).
+
+### **.gitignore**
+Archivo que especifica qué archivos/carpetas Git debe ignorar (node_modules, dist, etc.).
+
+### **README.md**
+Documentación del proyecto en formato Markdown.
+
+---
+
+## 🔑 TÉRMINOS CLAVE DE PROGRAMACIÓN
+
+### **Estado (State)**
+Datos que cambian con el tiempo y provocan re-renderizado del componente.
+
+### **Evento**
+Acción del usuario (click, input, submit) que dispara una función.
+```jsx
+onClick={handleClick}
+onChange={handleChange}
+```
+
+### **Validación**
+Proceso de verificar que los datos ingresados cumplan requisitos específicos.
+
+### **Callback Function**
+Función que se pasa como argumento a otra función.
+
+### **Destructuring**
+Extraer valores de objetos o arrays de forma concisa.
+```jsx
+const { nombre, email } = formData;
+```
+
+### **Template Literals**
+Cadenas de texto con interpolación usando backticks.
+```jsx
+`Cuota: ${formatoPesos(cuota)}`
+```
+
+### **Ternary Operator**
+Operador condicional abreviado.
+```jsx
+error ? 'Rojo' : 'Verde'
+```
+
+### **Arrow Function**
+Sintaxis concisa para definir funciones.
+```jsx
+const sumar = (a, b) => a + b;
+```
+
+---
+
+## 📊 CONCEPTOS DE DATOS
+
+### **Array**
+Colección ordenada de elementos. Ejemplo: `productos = [...]`
+
+### **Objeto**
+Colección de pares clave-valor.
+```jsx
+{ id: 'libre', nombre: 'Crédito Libre', tasa: '12.5%' }
+```
+
+### **JSON (JavaScript Object Notation)**
+Formato de intercambio de datos basado en texto.
+
+### **Key Prop**
+Identificador único para elementos renderizados con `.map()`. React lo usa para optimizar re-renders.
+
+---
+
+## 🎓 BUENAS PRÁCTICAS APLICADAS
+
+### **Componentes Funcionales**
+Uso de funciones en lugar de clases (moderno en React).
+
+### **Código Modular**
+Separación en archivos pequeños y específicos.
+
+### **Nombres Descriptivos**
+Variables y funciones con nombres claros: `handleSubmit`, `productosFiltrados`.
+
+### **DRY (Don't Repeat Yourself)**
+No repetir código; crear componentes reutilizables.
+
+### **Separación de Responsabilidades**
+Datos separados de la lógica y la presentación.
+
+---
+
+**Fin del Glosario** 📖
