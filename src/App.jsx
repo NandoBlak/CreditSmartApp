@@ -4,6 +4,7 @@ import Home from './pages/home'
 import Simulador from './pages/Simulador'
 import Simular from './pages/Simular'
 import Solicitar from './pages/Solicitar'
+import Admin from './pages/Admin'
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/simular/:id" element={<Simular />} />
         <Route path="/solicitar" element={<Solicitar />} />
         <Route path="/solicitar/:id" element={<Solicitar />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   )

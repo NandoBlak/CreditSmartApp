@@ -1,21 +1,45 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// Firebase core SDK and Firestore
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getAnalytics, isSupported } from "firebase/analytics";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase configuration from environment variables (Vite prefix required)
 const firebaseConfig = {
-    apiKey: "AIzaSyCU_rsvfBqEJmFXDI9ZjDM2AL_5UVh3OVw",
-    authDomain: "creditsmart-524df.firebaseapp.com",
-    projectId: "creditsmart-524df",
-    storageBucket: "creditsmart-524df.firebasestorage.app",
-    messagingSenderId: "135947453684",
-    appId: "1:135947453684:web:127a02e972bec1d3bf8aa1",
-    measurementId: "G-BSRPEQSV3Q"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// Basic guard to help during local setup
+const missing = Object.entries(firebaseConfig)
+    .filter(([, value]) => !value)
+    .map(([key]) => key);
+if (missing.length) {
+    console.warn("Firebase config missing keys:", missing.join(", "));
+}
+
+// Avoid re-initializing the app during hot reloads
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+// Firestore instance used across the app
+export const db = getFirestore(app);
+
+// Analytics (browser-only, optional)
+export let analytics = null;
+if (typeof window !== "undefined") {
+    isSupported()
+        .then((supported) => {
+            if (supported) {
+                analytics = getAnalytics(app);
+            }
+        })
+        .catch(() => {
+            // Analytics not available in this environment; ignore.
+        });
+}
+
+export default app;

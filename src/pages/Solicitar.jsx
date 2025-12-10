@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { getProducts, createSolicitud } from '../services/firestore';
 
 function Solicitar() {
   const { id } = useParams();
@@ -14,11 +13,7 @@ function Solicitar() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        const productsList = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
+        const productsList = await getProducts();
         setProductos(productsList);
       } catch (error) {
         console.error('Error al cargar productos:', error);
@@ -166,7 +161,7 @@ function Solicitar() {
     
     try {
       // Guardar solicitud en Firestore
-      const docRef = await addDoc(collection(db, "solicitudes"), {
+      const docRef = await createSolicitud({
         ...formData,
         cuotaMensual: cuotaMensual,
         submissionDate: new Date(),

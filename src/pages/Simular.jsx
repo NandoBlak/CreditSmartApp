@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { getProducts } from '../services/firestore';
 
 function Simular() {
   const { id } = useParams();
@@ -19,11 +18,7 @@ function Simular() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        const productsList = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
+        const productsList = await getProducts();
         
         // Encontrar el producto por ID o usar el primero
         const selectedProduct = productsList.find(p => p.id === id) || productsList[0];

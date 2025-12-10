@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { getProducts } from '../services/firestore';
 
 function Simulador() {
   const [creditos, setCreditos] = useState([]);
@@ -15,11 +14,7 @@ function Simulador() {
     const fetchCredits = async () => {
       try {
         setLoading(true);
-        const querySnapshot = await getDocs(collection(db, "products"));
-        const creditsList = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
+        const creditsList = await getProducts();
         setCreditos(creditsList);
       } catch (error) {
         console.error('Error al obtener créditos:', error);
