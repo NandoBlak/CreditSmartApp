@@ -1,9 +1,8 @@
 import { useState, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 import { productos } from '../data/creditsdata.js';
-
-// Array global para almacenar solicitudes (solo en memoria)
-const solicitudesEnMemoria = [];
 
 function Solicitar() {
   const { id } = useParams();
@@ -141,38 +140,43 @@ function Solicitar() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Agregar solicitud al array en memoria
-    const nuevaSolicitud = {
-      ...formData,
-      id: Date.now(),
-      fecha: new Date().toISOString(),
-      cuotaMensual: cuotaMensual
-    };
-    solicitudesEnMemoria.push(nuevaSolicitud);
-    
-    console.log('Solicitudes en memoria:', solicitudesEnMemoria);
-    
-    // Mostrar mensaje de éxito
-    setMensajeExito(true);
-    setMostrarResumen(false);
-    
-    // Limpiar formulario automáticamente después de 3 segundos
-    setTimeout(() => {
-      setFormData({
-        nombre: '',
-        email: '',
-        telefono: '',
-        cedula: '',
-        monto: '',
-        plazo: '',
-        tipoCredito: ''
+    try {
+      // Guardar solicitud en Firestore
+      const docRef = await addDoc(collection(db, "solicitudes"), {
+        ...formData,
+        cuotaMensual: cuotaMensual,
+        submissionDate: new Date(),
+        estado: 'pendiente'
       });
-      setMensajeExito(false);
-      navigate('/');
-    }, 3000);
+      
+      console.log('Solicitud enviada con ID:', docRef.id);
+      
+      // Mostrar mensaje de éxito
+      setMensajeExito(true);
+      setMostrarResumen(false);
+      
+      // Limpiar formulario automáticamente después de 3 segundos
+      setTimeout(() => {
+        setFormData({
+          nombre: '',
+          email: '',
+          telefono: '',
+          cedula: '',
+          monto: '',
+          plazo: '',
+          tipoCredito: ''
+        });
+        setMensajeExito(false);
+        navigate('/');
+      }, 3000);
+      
+    } catch (error) {
+      console.error('Error al enviar solicitud:', error);
+      alert('Error al enviar la solicitud. Por favor intenta de nuevo.');
+    }
   };
 
   const productoActual = formData.tipoCredito 
