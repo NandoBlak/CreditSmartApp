@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { productos } from '../data/creditsdata.js';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 
 function Simulador() {
   const [creditos, setCreditos] = useState([]);
@@ -11,22 +12,24 @@ function Simulador() {
   const [plazo, setPlazo] = useState('');
 
   useEffect(() => {
-    // Consulta asíncrona de datos
-    const cargarCreditos = async () => {
+    const fetchCredits = async () => {
       try {
         setLoading(true);
-        // Simular delay de red
-        await new Promise(resolve => setTimeout(resolve, 300));
-        setCreditos(productos);
+        const querySnapshot = await getDocs(collection(db, "products"));
+        const creditsList = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setCreditos(creditsList);
       } catch (error) {
-        console.error('Error al cargar créditos:', error);
+        console.error('Error al obtener créditos:', error);
         setCreditos([]);
       } finally {
         setLoading(false);
       }
     };
 
-    cargarCreditos();
+    fetchCredits();
   }, []);
 
   // Filtrar productos

@@ -1,25 +1,62 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { productos } from '../data/creditsdata.js';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 
 function Simular() {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  // Encontrar el producto por ID o usar el primero
-  const producto = productos.find(p => p.id === id) || productos[0];
+  const [producto, setProducto] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  // Estados para los inputs - inicializados con valores por defecto
+  const [monto, setMonto] = useState(50000000);
+  const [plazo, setPlazo] = useState(36);
+  const [mostrarResultados, setMostrarResultados] = useState(false);
+  const [resultados, setResultados] = useState(null);
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        const productsList = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        
+        // Encontrar el producto por ID o usar el primero
+        const selectedProduct = productsList.find(p => p.id === id) || productsList[0];
+        setProducto(selectedProduct);
+        
+        if (selectedProduct) {
+          // Actualizar estados con valores del producto
+          const montoMin = parseInt(selectedProduct.montoDesde.replace(/\D/g, ''));
+          const montoMax = parseInt(selectedProduct.montoHasta.replace(/\D/g, ''));
+          const plazoMaximo = parseInt(selectedProduct.plazoMax);
+          
+          setMonto(Math.round((montoMin + montoMax) / 2 / 10000) * 10000);
+          setPlazo(Math.min(Math.round(plazoMaximo / 2), plazoMaximo));
+        }
+      } catch (error) {
+        console.error('Error al cargar productos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProducts();
+  }, [id]);
+  
+  if (loading || !producto) {
+    return <div className="loading">Cargando producto...</div>;
+  }
   
   // Extraer valores numéricos
   const montoMin = parseInt(producto.montoDesde.replace(/\D/g, ''));
   const montoMax = parseInt(producto.montoHasta.replace(/\D/g, ''));
   const plazoMaximo = parseInt(producto.plazoMax);
   const tasaNum = parseFloat(producto.tasa.replace(/[^0-9.,]/g, '').replace(',', '.'));
-  
-  // Estados para los inputs
-  const [monto, setMonto] = useState(Math.round((montoMin + montoMax) / 2 / 10000) * 10000);
-  const [plazo, setPlazo] = useState(Math.min(Math.round(plazoMaximo / 2), plazoMaximo));
-  const [mostrarResultados, setMostrarResultados] = useState(false);
-  const [resultados, setResultados] = useState(null);
 
   // Formato pesos colombianos
   const formatoPesos = (x) => {

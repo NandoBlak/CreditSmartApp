@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { productos } from '../data/creditsdata.js';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 import CreditCard from '../components/creditCard';
 
 function Home() {
@@ -7,22 +8,24 @@ function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simular consulta asíncrona de datos
-    const cargarCreditos = async () => {
+    const fetchCredits = async () => {
       try {
         setLoading(true);
-        // Simular delay de red
-        await new Promise(resolve => setTimeout(resolve, 300));
-        setCreditos(productos);
+        const querySnapshot = await getDocs(collection(db, "products"));
+        const creditsList = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setCreditos(creditsList);
       } catch (error) {
-        console.error('Error al cargar créditos:', error);
+        console.error('Error al obtener créditos:', error);
         setCreditos([]);
       } finally {
         setLoading(false);
       }
     };
 
-    cargarCreditos();
+    fetchCredits();
   }, []);
 
   return (

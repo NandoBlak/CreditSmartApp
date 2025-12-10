@@ -1,13 +1,34 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-import { productos } from '../data/creditsdata.js';
 
 function Solicitar() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  
+  const [productos, setProductos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        const productsList = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setProductos(productsList);
+      } catch (error) {
+        console.error('Error al cargar productos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProducts();
+  }, []);
   
   const productoSeleccionado = id ? productos.find(p => p.id === id) : null;
   
@@ -45,7 +66,7 @@ function Solicitar() {
       }
     }
     return null;
-  }, [formData.monto, formData.plazo, formData.tipoCredito]);
+  }, [formData.monto, formData.plazo, formData.tipoCredito, productos]);
 
   // Validaciones en tiempo real
   const validarCampo = (nombre, valor) => {
@@ -182,6 +203,16 @@ function Solicitar() {
   const productoActual = formData.tipoCredito 
     ? productos.find(p => p.id === formData.tipoCredito) 
     : null;
+
+  if (loading) {
+    return (
+      <div className="solicitar">
+        <div className="solicitar-container">
+          <div className="loading">Cargando formulario...</div>
+        </div>
+      </div>
+    );
+  }
 
   if (mensajeExito) {
     return (
