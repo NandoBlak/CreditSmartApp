@@ -1,36 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { productos } from '../data/creditsdata.js';
 
 function Simulador() {
-  const [creditos, setCreditos] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [busqueda, setBusqueda] = useState('');
   const [rangoMonto, setRangoMonto] = useState('todos');
   const [filtroTasa, setFiltroTasa] = useState('todos');
   const [plazo, setPlazo] = useState('');
 
-  useEffect(() => {
-    // Consulta asíncrona de datos
-    const cargarCreditos = async () => {
-      try {
-        setLoading(true);
-        // Simular delay de red
-        await new Promise(resolve => setTimeout(resolve, 300));
-        setCreditos(productos);
-      } catch (error) {
-        console.error('Error al cargar créditos:', error);
-        setCreditos([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    cargarCreditos();
-  }, []);
-
   // Filtrar productos
-  const productosFiltrados = creditos
+  const productosFiltrados = productos
     .filter(producto => {
       // Búsqueda por nombre en tiempo real
       if (busqueda && !producto.nombre.toLowerCase().includes(busqueda.toLowerCase())) {
@@ -125,9 +104,7 @@ function Simulador() {
 
       <div className="resultados">
         <h2>Productos disponibles ({productosFiltrados.length})</h2>
-        {loading ? (
-          <div className="loading">Cargando productos...</div>
-        ) : productosFiltrados.length === 0 ? (
+        {productosFiltrados.length === 0 ? (
           <div className="sin-resultados">
             <p>No hay créditos disponibles</p>
             <p className="sin-resultados-subtitulo">
